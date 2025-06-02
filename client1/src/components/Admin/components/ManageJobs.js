@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-const apiUrl = process.env.REACT_APP_API_URL;
 import axios from "axios";
+const apiUrl = process.env.REACT_APP_API_URL;
 function ManageJobs() {
   const [Jobs, setJobs] = useState([]);
 
