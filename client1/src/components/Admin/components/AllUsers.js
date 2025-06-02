@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const AllUsers = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [activeUsers, setActiveUsers] = useState(null);
   useEffect(() => {
-    fetch("https://freelancingplatform.onrender.com:3001/AllUsers")
+    fetch(`${apiUrl}/AllUsers`)
       .then((res) => res.json())
       .then((users) => {
         setData(users);

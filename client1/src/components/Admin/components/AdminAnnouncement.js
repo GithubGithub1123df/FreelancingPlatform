@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const apiUrl = process.env.REACT_APP_API_URL;
 function AdminAnnouncement() {
   const [Announcements, setAnnouncements] = useState([]);
   const [activeAnnouncement, setActiveAnnouncement] = useState(null);
   const deleteAnnouncement = async (id) => {
     try {
-      const res = await fetch(
-        `https://freelancingplatform.onrender.com:3001/AdminAnnouncement/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`${apiUrl}/AdminAnnouncement/${id}`, {
+        method: "DELETE",
+      });
 
       const data = await res.json();
 
@@ -30,7 +28,7 @@ function AdminAnnouncement() {
 
   useEffect(() => {
     axios
-      .get("https://freelancingplatform.onrender.com:3001/AdminAnnouncement")
+      .get(`${apiUrl}/AdminAnnouncement`)
       .then((res) => setAnnouncements(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
@@ -47,13 +45,9 @@ function AdminAnnouncement() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "https://freelancingplatform.onrender.com:3001/AdminAnnouncement",
-        form,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post(`${apiUrl}/AdminAnnouncement`, form, {
+        withCredentials: true,
+      });
       setMsg("Feedback Received");
       setTimeout(() => nav("/"), 1500);
     } catch (err) {
@@ -67,7 +61,7 @@ function AdminAnnouncement() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch("https://freelancingplatform.onrender.com:3001/AdminAnnouncement")
+    fetch(`${apiUrl}/AdminAnnouncement`)
       .then((res) => res.json())
       .then((Announcements) => {
         setData(Announcements);

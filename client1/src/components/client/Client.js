@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const Client = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     axios
-      .get("https://freelancingplatform.onrender.com:3001/Client")
+      .get(`${apiUrl}/Client`)
       .then((res) => setUsers(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);

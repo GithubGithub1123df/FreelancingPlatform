@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const ManageFreelancers = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [activeUsers, setActiveUsers] = useState(null);
   useEffect(() => {
-    fetch("https://freelancingplatform.onrender.com:3001/ManageFreelancers")
+    fetch(`${apiUrl}/ManageFreelancers`)
       .then((res) => res.json())
       .then((users) => {
         setData(users);

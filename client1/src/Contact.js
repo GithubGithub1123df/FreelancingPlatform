@@ -11,19 +11,15 @@ export default function Contact() {
   });
   const [msg, setMsg] = useState("");
   const nav = useNavigate();
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "https://freelancingplatform.onrender.com:3001/contact",
-        form,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post(`${apiUrl}/contact`, form, {
+        withCredentials: true,
+      });
       setMsg("Feedback Received");
       setTimeout(() => nav("/"), 1500);
     } catch (err) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const Reports = () => {
   const [reportData, setReportData] = useState({
     totalUsers: 0,
@@ -13,9 +13,7 @@ const Reports = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://freelancingplatform.onrender.com:3001/Reports"
-        );
+        const response = await fetch(`${apiUrl}/Reports`);
         const data = await response.json();
         setReportData(data);
       } catch (err) {

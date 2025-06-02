@@ -12,10 +12,7 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await axios.post(
-        "https://freelancingplatform.onrender.com:3001/login",
-        formData
-      );
+      const res = await axios.post(`${apiUrl}/login`, formData);
       const user = res.data.user;
       const users = res.data;
       localStorage.setItem("user", JSON.stringify(user));

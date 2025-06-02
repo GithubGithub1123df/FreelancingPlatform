@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -12,12 +12,9 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      const res = await axios.post(
-        "https://freelancingplatform.onrender.com:3001/chatbot",
-        {
-          message: input,
-        }
-      );
+      const res = await axios.post(`${apiUrl}/chatbot`, {
+        message: input,
+      });
 
       const botReply = res.data.reply;
       setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
@@ -25,7 +22,7 @@ const Chatbot = () => {
       console.error("Error contacting server:", err.message);
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "⚠️ Error contacting server." },
+        { sender: "bot", text: "Error contacting server." },
       ]);
     }
 

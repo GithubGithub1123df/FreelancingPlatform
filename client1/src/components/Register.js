@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+const apiUrl = process.env.REACT_APP_API_URL;
 export default function Register() {
   const [form, setForm] = useState({
     Fname: "",
@@ -22,13 +22,9 @@ export default function Register() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "https://freelancingplatform.onrender.com:3001/register",
-        form,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post(`${apiUrl}/register`, form, {
+        withCredentials: true,
+      });
       setMsg("Registered! You can now login.");
       setTimeout(() => nav("/login"), 1500);
     } catch (err) {
