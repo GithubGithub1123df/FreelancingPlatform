@@ -1,0 +1,29 @@
+{
+  "name": "project-1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.3.0",
+    "@coreui/react": "^5.7.0",
+    "@coreui/react-chartjs": "^3.0.0",
+    "@coreui/utils": "^2.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.0",
+    "npx": "^10.2.2",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.6.0",
+    "socket.io": "^4.8.1",
+    "vite": "^6.3.5"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.27.1"
+  }
+}
