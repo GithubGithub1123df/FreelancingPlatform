@@ -7,9 +7,12 @@ function ManageJobs() {
   const [ActiveJobs, setActiveJobs] = useState(null);
   const deleteJob = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3001/ManageJobs/${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://freelancingplatform.onrender.com:3001/ManageJobs/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       const data = await res.json();
 
@@ -28,7 +31,7 @@ function ManageJobs() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/ManageJobs")
+      .get("https://freelancingplatform.onrender.com:3001/ManageJobs")
       .then((res) => setJobs(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
@@ -45,9 +48,13 @@ function ManageJobs() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/ManageJobs", form, {
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://freelancingplatform.onrender.com:3001/ManageJobs",
+        form,
+        {
+          withCredentials: true,
+        }
+      );
       setMsg("Feedback Received");
       setTimeout(() => nav("/"), 1500);
     } catch (err) {
@@ -61,7 +68,7 @@ function ManageJobs() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/ManageJobs")
+    fetch("https://freelancingplatform.onrender.com:3001/ManageJobs")
       .then((res) => res.json())
       .then((Jobs) => {
         setData(Jobs);

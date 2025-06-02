@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 
 const Settings = () => {
   // Profile state
-  const profile = axios.put("http://localhost:3001/ManageJobs", form, {
-    withCredentials: true,
-  });
+  const profile = axios.put(
+    "https://freelancingplatform.onrender.com:3001/ManageJobs",
+    form,
+    {
+      withCredentials: true,
+    }
+  );
 
   // Dark mode state
   const [darkMode, setDarkMode] = useState(false);

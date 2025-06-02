@@ -6,7 +6,7 @@ const AllUsers = () => {
   const [results, setResults] = useState([]);
   const [activeUsers, setActiveUsers] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:3001/AllUsers")
+    fetch("https://freelancingplatform.onrender.com:3001/AllUsers")
       .then((res) => res.json())
       .then((users) => {
         setData(users);

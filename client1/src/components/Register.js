@@ -22,9 +22,13 @@ export default function Register() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/register", form, {
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://freelancingplatform.onrender.com:3001/register",
+        form,
+        {
+          withCredentials: true,
+        }
+      );
       setMsg("Registered! You can now login.");
       setTimeout(() => nav("/login"), 1500);
     } catch (err) {

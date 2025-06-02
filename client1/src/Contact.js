@@ -17,9 +17,13 @@ export default function Contact() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3001/contact", form, {
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://freelancingplatform.onrender.com:3001/contact",
+        form,
+        {
+          withCredentials: true,
+        }
+      );
       setMsg("Feedback Received");
       setTimeout(() => nav("/"), 1500);
     } catch (err) {

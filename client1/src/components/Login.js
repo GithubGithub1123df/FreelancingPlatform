@@ -12,7 +12,10 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:3001/login", formData);
+      const res = await axios.post(
+        "https://freelancingplatform.onrender.com:3001/login",
+        formData
+      );
       const user = res.data.user;
       const users = res.data;
       localStorage.setItem("user", JSON.stringify(user));
@@ -71,65 +74,3 @@ export default function Login() {
     </div>
   );
 }
-// import React, { useState } from "react";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-
-// export default function Login() {
-//   const [form, setForm] = useState({ username: "", password: "" });
-//   const [err, setErr] = useState("");
-//   const nav = useNavigate();
-
-//   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-//   const onSubmit = async (e) => {
-//     e.preventDefault();
-//     setErr("");
-//     try {
-//       const res = await axios.post("http://localhost:3001/login", form, {
-//         withCredentials: true,
-//       });
-//       const user = res.data.user;
-
-//       window.localStorage.setItem("token", user);
-//       window.localStorage.setItem("usertype", user.usertype);
-//       window.localStorage.setItem("isLoggedIn", true);
-
-//       // Navigate based on user type
-//       if (user.usertype === "Client") {
-//         nav("/Client", { state: { user } });
-//       } else if (user.usertype === "Admin") {
-//         nav("/Admin", { state: { user } });
-//       } else {
-//         nav("/Freelancer", { state: { user } });
-//       }
-//     } catch (err) {
-//       setErr(err.response?.data?.message || "Login failed");
-//     }
-//   };
-
-//   return (
-//     <div className="container mt-5" style={{ maxWidth: 400 }}>
-//       <h2>Login</h2>
-//       {err && <div className="alert alert-danger">{err}</div>}
-//       <form onSubmit={onSubmit}>
-//         <input
-//           name="username"
-//           className="form-control mb-2"
-//           placeholder="Username or Email"
-//           onChange={onChange}
-//           required
-//         />
-//         <input
-//           name="password"
-//           type="password"
-//           className="form-control mb-2"
-//           placeholder="Password"
-//           onChange={onChange}
-//           required
-//         />
-//         <button className="btn btn-primary w-100">Login</button>
-//       </form>
-//     </div>
-//   );
-// }

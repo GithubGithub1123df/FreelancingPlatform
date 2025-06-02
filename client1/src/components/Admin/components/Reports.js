@@ -13,7 +13,9 @@ const Reports = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3001/Reports"); // update with your server URL
+        const response = await fetch(
+          "https://freelancingplatform.onrender.com:3001/Reports"
+        );
         const data = await response.json();
         setReportData(data);
       } catch (err) {

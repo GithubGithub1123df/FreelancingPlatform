@@ -12,11 +12,14 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      const res = await axios.post("http://localhost:3001/chatbot", {
-        message: input,
-      });
+      const res = await axios.post(
+        "https://freelancingplatform.onrender.com:3001/chatbot",
+        {
+          message: input,
+        }
+      );
 
-      const botReply = res.data.reply; // ✅ Make sure this matches your backend
+      const botReply = res.data.reply;
       setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
     } catch (err) {
       console.error("Error contacting server:", err.message);

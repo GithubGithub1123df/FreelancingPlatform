@@ -62,7 +62,7 @@ const IDScanner = ({ userId }) => {
   const updateUserProfile = async (id) => {
     try {
       const response = await axios.put(
-        `http://localhost:3001/IDScanner/${userId}`,
+        `https://freelancingplatform.onrender.com:3001/IDScanner/${userId}`,
         { nationalId: id }
       );
       if (response.status === 200) {

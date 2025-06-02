@@ -6,7 +6,7 @@ const Client = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/Client")
+      .get("https://freelancingplatform.onrender.com:3001/Client")
       .then((res) => setUsers(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
