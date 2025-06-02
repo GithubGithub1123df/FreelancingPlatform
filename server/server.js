@@ -12,7 +12,7 @@ const PORT = 3001;
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
 
-await mongoose.connect("mongodb://127.0.0.1:27017/Ondemand", {
+await mongoose.connect("process.env.MONGO_URI", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
