@@ -9,12 +9,26 @@ import Jobs from "./models/Jobs.js";
 const app = express();
 const PORT = 3001;
 
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://localhost:3000", // for local dev
+  "https://freelancingplatform-1.onrender.com", // your deployed frontend
+];
+
 app.use(
   cors({
-    origin: "https://freelancingplatform-1.onrender.com:3000",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 app.use(express.json());
 
 await mongoose.connect(process.env.MONGO_URI, {
