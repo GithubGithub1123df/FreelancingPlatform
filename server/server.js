@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
-import FEEDBACK from "./models/FEEDBACK.js";
+import FEEDBACK from "./models/Feedback.js";
 import AdminAnnouncement from "./models/AdminAnnouncement.js";
 import Jobs from "./models/Jobs.js";
 const app = express();
