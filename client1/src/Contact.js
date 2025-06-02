@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -11,7 +12,6 @@ export default function Contact() {
   });
   const [msg, setMsg] = useState("");
   const nav = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL;
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {

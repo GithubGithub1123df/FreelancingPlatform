@@ -2,9 +2,7 @@ import axios from "axios";
 const apiUrl = process.env.REACT_APP_API_URL;
 export const getAllUsers = async () => {
   try {
-    const res = await axios.get(
-      "https://freelancingplatform.onrender.com:3001/api/jobs"
-    );
+    const res = await axios.get(`${apiUrl}/api/jobs`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch jobs:", err);
