@@ -11,7 +11,7 @@ const PORT = 3001;
 
 app.use(
   cors({
-    origin: "https://freelancingplatform.onrender.com:3000",
+    origin: "https://freelancingplatform-1.onrender.com:3000",
     credentials: true,
   })
 );
