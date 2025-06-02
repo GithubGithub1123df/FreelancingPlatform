@@ -9,7 +9,12 @@ import Jobs from "./models/Jobs.js";
 const app = express();
 const PORT = 3001;
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(
+  cors({
+    origin: "https://freelancingplatform.onrender.com:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 await mongoose.connect(process.env.MONGO_URI, {
