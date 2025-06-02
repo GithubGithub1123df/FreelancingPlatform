@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import axios from "axios";
 const Settings = () => {
   // Profile state
-  const profile = axios.put(
+  const [profile, setProfile] = useState({});
+
+  const profiles = axios.put(
     "https://freelancingplatform.onrender.com:3001/ManageJobs",
     form,
     {
