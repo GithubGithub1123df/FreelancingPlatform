@@ -7,7 +7,7 @@ const ManageFreelancers = () => {
   const [results, setResults] = useState([]);
   const [activeUsers, setActiveUsers] = useState(null);
   useEffect(() => {
-    fetch(`${apiUrl}/ManageFreelancers`)
+    fetch(`http://localhost:3000/ManageFreelancers`)
       .then((res) => res.json())
       .then((users) => {
         setData(users);

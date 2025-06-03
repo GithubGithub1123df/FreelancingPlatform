@@ -8,7 +8,7 @@ function ManageJobs() {
   const [ActiveJobs, setActiveJobs] = useState(null);
   const deleteJob = async (id) => {
     try {
-      const res = await fetch(`${apiUrl}/ManageJobs/${id}`, {
+      const res = await fetch(`http://localhost:3000/ManageJobs/${id}`, {
         method: "DELETE",
       });
 
@@ -29,7 +29,7 @@ function ManageJobs() {
 
   useEffect(() => {
     axios
-      .get(`${apiUrl}/ManageJobs`)
+      .get(`http://localhost:3000/ManageJobs`)
       .then((res) => setJobs(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
@@ -46,7 +46,7 @@ function ManageJobs() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${apiUrl}/ManageJobs`, form, {
+      await axios.post(`http://localhost:3000/ManageJobs`, form, {
         withCredentials: true,
       });
       setMsg("Feedback Received");
@@ -62,7 +62,7 @@ function ManageJobs() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch(`${apiUrl}/ManageJobs`)
+    fetch(`http://localhost:3000/ManageJobs`)
       .then((res) => res.json())
       .then((Jobs) => {
         setData(Jobs);

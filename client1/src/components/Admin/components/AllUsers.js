@@ -6,7 +6,7 @@ const AllUsers = () => {
   const [results, setResults] = useState([]);
   const [activeUsers, setActiveUsers] = useState(null);
   useEffect(() => {
-    fetch(`${apiUrl}/AllUsers`)
+    fetch(`http://localhost:3000/AllUsers`)
       .then((res) => res.json())
       .then((users) => {
         setData(users);
