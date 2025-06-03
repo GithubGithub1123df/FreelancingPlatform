@@ -17,7 +17,7 @@ import Admin from "./components/Admin/Admin";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Client from "./components/client/Client";
-import Notification from "./components/UserNotification";
+import Notification from "./components/Notifications";
 import Chatbot from "./components/Chatbot";
 import Freelancer from "./components/Freelancer/Freelancer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -87,10 +87,7 @@ function App() {
             <>
               <Route path="/" element={<Navigate to="/Freelancer" />}></Route>
               <Route path="/chatbot" element={<Chatbot />}></Route>
-              <Route
-                path="/UserNotification"
-                element={<Notification />}
-              ></Route>
+              <Route path="/notifications" element={<Notification />}></Route>
             </>
           )}
 

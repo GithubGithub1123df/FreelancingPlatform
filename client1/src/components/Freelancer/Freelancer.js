@@ -6,8 +6,6 @@ function Freelancer() {
   const users = state?.allUsers || [];
   const user = state?.user || [];
 
-  const [selectedService, setSelectedService] = useState("Repair");
-
   return (
     <>
       <div className="w-75 d-flex justify-content-end vh-100 position-absolute top-0 end-0 bg-white flex-grow-1">
