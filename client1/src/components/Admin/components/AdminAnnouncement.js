@@ -7,7 +7,7 @@ function AdminAnnouncement() {
   const [activeAnnouncement, setActiveAnnouncement] = useState(null);
   const deleteAnnouncement = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3000/AdminAnnouncement/${id}`, {
+      const res = await fetch(`${apiUrl}/AdminAnnouncement/${id}`, {
         method: "DELETE",
       });
 
@@ -28,7 +28,7 @@ function AdminAnnouncement() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/AdminAnnouncement`)
+      .get(`${apiUrl}/AdminAnnouncement`)
       .then((res) => setAnnouncements(res.data))
       .catch((err) => console.error("Failed to fetch users:", err));
   }, []);
@@ -45,7 +45,7 @@ function AdminAnnouncement() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:3000/AdminAnnouncement`, form, {
+      await axios.post(`${apiUrl}/AdminAnnouncement`, form, {
         withCredentials: true,
       });
       setMsg("Feedback Received");
@@ -61,7 +61,7 @@ function AdminAnnouncement() {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/AdminAnnouncement`)
+    fetch(`${apiUrl}/AdminAnnouncement`)
       .then((res) => res.json())
       .then((Announcements) => {
         setData(Announcements);
