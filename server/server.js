@@ -1,6 +1,5 @@
 import express from "express";
 import mongoose from "mongoose";
-import cors from "cors";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import FEEDBACK from "./models/Feedback.js";
