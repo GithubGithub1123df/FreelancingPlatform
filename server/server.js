@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import FEEDBACK from "./models/Feedback.js";
@@ -7,8 +8,6 @@ import AdminAnnouncement from "./models/AdminAnnouncement.js";
 import Jobs from "./models/Jobs.js";
 const app = express();
 const PORT = 3001;
-
-const cors = require("cors");
 
 const allowedOrigins = [
   "http://localhost:3000", // for local dev
