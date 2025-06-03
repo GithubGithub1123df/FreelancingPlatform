@@ -109,7 +109,18 @@ function Notifications() {
           >
             <h5>{activeAnnouncement.title}</h5>
             <p>{activeAnnouncement.announce}</p>
-
+            <button
+              className="btn btn-danger h-75 d-flex align-items-center"
+              style={{
+                fontSize: "12px",
+              }}
+              onClick={() => {
+                deleteAnnouncement(activeAnnouncement._id);
+                setActiveAnnouncement(null);
+              }}
+            >
+              Delete
+            </button>
             <span
               className="position-absolute bottom-0 m-2"
               style={{ fontSize: "12px", right: "10px", marginBottom: "7px" }}
@@ -139,11 +150,12 @@ function Notifications() {
         </div>
       )}
       <div className="d-flex align-items-center justify-content-spaceBetween bg-white flex-column vh-100">
-        <div>
-          <h1>Notification</h1>
+        <h1>Notification</h1>
 
+        <div>
+          <h2 className="text-center">Announcement</h2>
           {Announcements.length === 0 ? (
-            <p>No Notifications has been found.</p>
+            <p>No Announcements has been found.</p>
           ) : (
             <ul>
               {results.map((announce, idx) => (
@@ -159,6 +171,14 @@ function Notifications() {
                     style={{ fontSize: "10px", right: "70px" }}
                   >
                     {announce.CreatedAt + " " + announce.timestamp}
+                  </span>
+                  <span>
+                    <button
+                      className="btn btn-danger btn-sm position-absolute p-1 end-0 me-2 top-0 mt-1"
+                      onClick={() => deleteAnnouncement(announce._id)}
+                    >
+                      Delete
+                    </button>
                   </span>
                 </li>
               ))}
