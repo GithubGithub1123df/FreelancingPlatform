@@ -63,7 +63,7 @@ const Freelancer = () => {
                 <img
                   src={
                     activeUsers.profileImage
-                      ? activeUsers.profileImage
+                      ? `${apiUrl}${activeUsers.profileImage}`
                       : activeUsers.gender === "Female"
                       ? defaultFemale
                       : defaultMale
@@ -145,7 +145,7 @@ const Freelancer = () => {
                     <img
                       src={
                         u.profileImage
-                          ? u.profileImage
+                          ? `http://localhost:3001${u.profileImage}`
                           : u.gender === "Female"
                           ? defaultFemale
                           : defaultMale
