@@ -168,7 +168,7 @@ const Client = () => {
                     <img
                       src={
                         u.profileImage
-                          ? `http://localhost:3001${u.profileImage}`
+                          ? `${apiUrl}${u.profileImage}`
                           : u.gender === "Female"
                           ? defaultFemale
                           : defaultMale
