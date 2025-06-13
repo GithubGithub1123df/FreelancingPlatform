@@ -71,7 +71,7 @@ const Client = () => {
                 <img
                   src={
                     activeUsers.profileImage
-                      ? `${activeUsers.profileImage}`
+                      ? activeUsers.profileImage
                       : activeUsers.gender === "Female"
                       ? defaultFemale
                       : defaultMale
@@ -168,7 +168,7 @@ const Client = () => {
                     <img
                       src={
                         u.profileImage
-                          ? `${u.profileImage}`
+                          ? u.profileImage
                           : u.gender === "Female"
                           ? defaultFemale
                           : defaultMale
