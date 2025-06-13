@@ -8,6 +8,9 @@ const Reports = () => {
     totalJobs: 0,
     activeJobs: 0,
     completedJobs: 0,
+    CancelledJobs: 0,
+    PendingJobs: 0,
+    DeclinedJobs: 0,
   });
 
   useEffect(() => {
@@ -31,42 +34,46 @@ const Reports = () => {
     totalJobs,
     activeJobs,
     completedJobs,
+    CancelledJobs,
+    PendingJobs,
+    DeclinedJobs,
   } = reportData;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto mt-6">
-      <h1 className="text-2xl font-bold mb-6">System Reports</h1>
+    <div className="p-6 max-w-5xl mx-auto mt-6 bg-secondary d-flex flex-column align-items-center">
+      <h1 className="text-2xl font-bold mb-6 text-center text-white">
+        System Reports
+      </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <ReportCard
-          title="Total Users"
-          value={totalUsers}
-          color="bg-blue-100"
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-75">
+        <ReportCard title="Total Users" value={totalUsers} color="bg-white" />
         <ReportCard
           title="Freelancers"
           value={totalFreelancers}
-          color="bg-green-100"
+          color="bg-white"
         />
+        <ReportCard title="Clients" value={totalClients} color="bg-white" />
         <ReportCard
-          title="Clients"
-          value={totalClients}
-          color="bg-purple-100"
-        />
-        <ReportCard
-          title="Total Jobs"
+          title="Total Registered Jobs"
           value={totalJobs}
-          color="bg-yellow-100"
+          color="bg-white"
         />
-        <ReportCard
-          title="Active Jobs"
-          value={activeJobs}
-          color="bg-orange-100"
-        />
+        <ReportCard title="Active Jobs" value={activeJobs} color="bg-white" />
         <ReportCard
           title="Completed Jobs"
           value={completedJobs}
-          color="bg-teal-100"
+          color="bg-white"
+        />
+        <ReportCard title="Pending Jobs" value={PendingJobs} color="bg-white" />
+        <ReportCard
+          title="Declined Jobs"
+          value={DeclinedJobs}
+          color="bg-white"
+        />
+        <ReportCard
+          title="Canceled Jobs"
+          value={CancelledJobs}
+          color="bg-white"
         />
       </div>
     </div>

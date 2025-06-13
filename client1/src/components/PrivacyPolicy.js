@@ -1,11 +1,11 @@
 // src/PrivacyPolicy.js
 import React, { useEffect, useState } from "react";
 
-export default function About() {
+export default function PrivacyPolicy() {
   const [text, setText] = useState("Loading...");
 
   useEffect(() => {
-    fetch("/about.txt")
+    fetch("/privacy.txt")
       .then((res) => res.text())
       .then(setText)
       .catch((err) => setText("Failed to load privacy policy."));
@@ -21,7 +21,7 @@ export default function About() {
         }}
         className="bg-white p-3 rounded-5 w-75 m-5 inline-flex overflow-auto h-75"
       >
-        <h2 className="text-center mt-2 mb-3 ">About</h2>
+        <h2 className="text-center mt-2 mb-3 ">Privacy Policy</h2>
 
         <p>{text}</p>
       </div>

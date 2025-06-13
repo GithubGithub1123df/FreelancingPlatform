@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 
 import SignoutButton from "./components/SignoutButton";
-import SignOutButton from "./components/SignoutButton";
+
 import { useLocation, useNavigate } from "react-router";
 
 function Navbar({ isLoggedIn, userType }) {
@@ -16,12 +16,12 @@ function Navbar({ isLoggedIn, userType }) {
     { label: "Dashboard", path: "/admin" },
     { label: "Manage Users", path: "/AllUsers" },
     { label: "Manage Freelancers", path: "/ManageFreelancers" },
+    { label: "All Clients", path: "/AllClients" },
     { label: "Manage Jobs", path: "/ManageJobs" },
-    { label: "Moderate Chats", path: "/admin/moderation" },
+    { label: "Manage FAQ", path: "/FAQ" },
     { label: "Announce", path: "/AdminAnnouncement" },
-    { label: "Search History", path: "/admin/search-history" },
     { label: "Reports", path: "/Reports" },
-    { label: "Settings", path: "/Settings" },
+    { label: "Profile", path: "/profile" },
   ];
 
   // for Client, Freelancer and Guest Accounts
@@ -109,7 +109,7 @@ function Navbar({ isLoggedIn, userType }) {
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
-                          <i class="bi bi-skip-start-btn-fill"></i>Let's Get
+                          <i className="bi bi-skip-start-btn-fill"></i>Let's Get
                           Started
                         </a>
                         <ul
@@ -231,7 +231,7 @@ function Navbar({ isLoggedIn, userType }) {
                             aria-labelledby="profileDropdown"
                           >
                             <li>
-                              <a className="dropdown-item" href="/settings">
+                              <a className="dropdown-item" href="/profile">
                                 Settings
                               </a>
                             </li>
@@ -252,54 +252,62 @@ function Navbar({ isLoggedIn, userType }) {
       </div>
       {isLoggedIn === "true" && userType === "Admin" && (
         <>
-          <div className="bg-dark text-white position-sticky">
-            <div className="d-md-none p-3 border-bottom">
-              <Button
-                variant="outline-light"
-                onClick={() => setCollapsed(!collapsed)}
-                className="w-100"
+          <div
+            className="position-fixed top-0 start-0"
+            style={{ zIndex: 1050 }}
+          >
+            <Button
+              variant="dark"
+              onClick={() => setCollapsed(!collapsed)}
+              className="shadow"
+            >
+              {collapsed ? "☰ Menu" : "✕ Close"}
+            </Button>
+          </div>
+
+          {/* Sidebar Overlay */}
+          <div
+            className={`bg-dark text-white position-fixed top-0 start-0 ${
+              collapsed ? "d-none" : "d-block"
+            }`}
+            style={{
+              width: "250px",
+              height: "100vh",
+              zIndex: 1040,
+              overflowY: "auto",
+            }}
+          >
+            <div className="p-3 border-bottom">
+              <a
+                className="navbar-brand fw-bold d-block"
+                href="/"
+                style={{ width: "70px", height: "70px", marginTop: "15px" }}
               >
-                {collapsed ? "☰ Menu" : "✕ Close"}
-              </Button>
+                <img src={Logo} alt="Logo" className="w-100" />
+              </a>
             </div>
 
-            <div
-              className={`d-md-block ${
-                collapsed ? "d-none" : "d-block"
-              } p-3 w-25 bg-darks`}
-              style={{ minHeight: "100vh", maxWidth: "250px" }}
-            >
-              <a
-                className="navbar-brand fw-bold"
-                href="/"
-                style={{ width: "50px", height: "50px" }}
-              >
-                <img src={Logo} alt="lOGO" className="w-100" />
-              </a>
-              <ul className="nav nav-pills flex-column">
-                {menuItems.map((item) => (
-                  <li className="nav-item" key={item.path}>
-                    <button
-                      className={`nav-link text-start text-white w-100 ${
-                        location.pathname === item.path
-                          ? "active bg-primary"
-                          : ""
-                      }`}
-                      onClick={() => {
-                        navigate(item.path);
-                        setCollapsed(true);
-                      }}
-                      style={{ border: "none", background: "none" }}
-                    >
-                      {item.label}
-                    </button>
-                  </li>
-                ))}
-                <li className="mt-3">
-                  <SignOutButton />
+            <ul className="nav nav-pills flex-column px-3">
+              {menuItems.map((item) => (
+                <li className="nav-item mt-2" key={item.path}>
+                  <button
+                    className={`nav-link text-start text-white w-100 ${
+                      location.pathname === item.path ? "active bg-primary" : ""
+                    }`}
+                    onClick={() => {
+                      navigate(item.path);
+                      setCollapsed(true); // Close after selecting
+                    }}
+                    style={{ border: "none", background: "none" }}
+                  >
+                    <span className="fs-6">{item.label}</span>
+                  </button>
                 </li>
-              </ul>
-            </div>
+              ))}
+              <li className="mt-3">
+                <SignOutButton />
+              </li>
+            </ul>
           </div>
         </>
       )}

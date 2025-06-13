@@ -1,129 +1,103 @@
-import React, { useState } from "react";
-import { useLocation, useEffect } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+const apiUrl = process.env.REACT_APP_API_URL;
 import {
   BarChart,
   Bar,
+  PieChart,
+  Pie,
+  Cell,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
 } from "recharts";
+// blue, green, crimson red, purple, yellow
+const COLORS = ["#007bff", "#28a745", "#FFFF00", "#A020F0", "#DC143C"];
 
-const serviceData = [
-  { month: "Jan", Cleaning: 10, Repair: 5, Delivery: 8 },
-  { month: "Feb", Cleaning: 12, Repair: 8, Delivery: 6 },
-  { month: "Mar", Cleaning: 8, Repair: 7, Delivery: 10 },
-  { month: "Apr", Cleaning: 15, Repair: 10, Delivery: 9 },
-  { month: "May", Cleaning: 9, Repair: 6, Delivery: 7 },
-  { month: "Jun", Cleaning: 14, Repair: 11, Delivery: 12 },
-  { month: "Jul", Cleaning: 13, Repair: 9, Delivery: 8 },
-  { month: "Aug", Cleaning: 11, Repair: 10, Delivery: 9 },
-  { month: "Sep", Cleaning: 12, Repair: 7, Delivery: 6 },
-  { month: "Oct", Cleaning: 10, Repair: 6, Delivery: 8 },
-  { month: "Nov", Cleaning: 14, Repair: 9, Delivery: 7 },
-  { month: "Dec", Cleaning: 15, Repair: 12, Delivery: 10 },
-];
-function Admin() {
-  const { state } = useLocation();
-  const users = state?.allUsers || [];
-  const user = state?.user || [];
+const Admin = () => {
+  const [stats, setStats] = useState(null);
 
-  const [selectedService, setSelectedService] = useState("Repair");
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/admin`);
+        setStats(res.data);
+      } catch (err) {
+        console.error("Failed to load admin stats:", err);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (!stats) return <p>Loading dashboard...</p>;
+
+  const barData = [
+    { name: "Users", count: stats.totalUsers },
+    { name: "Jobs", count: stats.totalJobs },
+  ];
+
+  const pieData = [
+    { name: "Active Jobs", value: stats.activeJobs },
+    { name: "Completed Jobs", value: stats.completedJobs },
+    { name: "pending Jobs", value: stats.PendingJobs },
+    { name: "declined Jobs", value: stats.DeclinedJobs },
+    { name: "cancelled Jobs", value: stats.CancelledJobs },
+  ];
 
   return (
-    <>
-      <div className="w-75 d-flex justify-content-end vh-100 position-absolute top-0 end-0 bg-white flex-grow-1">
-        <div className="w-100 position-absolute end-0 bg-dark h-100">
-          <nav className="d-flex align-items-center justify-content-center flex-column">
-            <div className="w-100 d-flex align-items-center justify-content-center position-relative">
-              <h1>Dashboard</h1>
-              <div className="position-absolute end-0 m-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-search"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                </svg>
-                <input type="text" placeholder="search" />
-              </div>
-            </div>
-            <div className="position-relative mt-2">
-              <ul className="d-flex align-items-center justify-content-center">
-                <a
-                  href="/ManageFreelancers"
-                  className="text-decoration-none font-weight-bold"
-                >
-                  <li className="d-flex m-5 mt-0 mb-0 bg-primary p-3 rounded-4 text-white fw-bold">
-                    Freelancers: <span className="FreelancerCount">{}</span>
-                  </li>
-                </a>
-                <a
-                  href="/AllClients"
-                  className="text-decoration-none font-weight-bold"
-                >
-                  <li className="d-flex m-5 mt-0 mb-0 bg-primary p-3 rounded-4 text-white fw-bold">
-                    Client: <span className="ClientCount">{}</span>
-                  </li>
-                </a>
-                <a
-                  href="/AllUsers"
-                  className="text-decoration-none font-weight-bold"
-                >
-                  <li className="d-flex m-3 mt-0 mb-0 bg-primary p-3 rounded-4 text-white fw-bold">
-                    All Users: <span className="fw-bold">{}</span>
-                  </li>
-                </a>
-                <a href="" className="text-decoration-none font-weight-bold">
-                  <li className="d-flex m-5 mt-0 mb-0 bg-primary p-3 rounded-4 text-white fw-bold">
-                    Total Services:{" "}
-                    <span className="ServicesCount">305785</span>
-                  </li>
-                </a>
-              </ul>
-            </div>
-          </nav>
+    <div className=" bg-secondary">
+      <h2 className="mb-4 text-center fw-bold text-white">Admin Dashboard</h2>
 
-          <div className="h-100 w-100 d-flex align-items-center justify-content-center position-relative p-2">
-            <div className="w-75">
-              <div className="shadow-md">
-                <h2 className="text-xl font-semibold mb-3 text-center">
-                  Monthly Service Report
-                </h2>
-                <select
-                  value={selectedService}
-                  onValueChange={setSelectedService}
-                >
-                  <option value="Cleaning">Cleaning</option>
-                  <option value="Repair">Repair</option>
-                  <option value="Delivery">Delivery</option>
-                </select>
+      <div className="row">
+        <div className="col-md-6 mb-4">
+          <div className="card shadow-sm p-3 bg-dark">
+            <h5 className="text-center text-white">Users vs Jobs</h5>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={barData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="count" fill="#0076ff" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
 
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={serviceData}>
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey={selectedService} fill="#8884d8" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-            <div className="w-25 border border-2 border-black h-100">
-              <h4 className="text-center position-absolute top-0">
-                Top Services
-              </h4>
-            </div>
+        <div className="col-md-6 mb-4 ">
+          <div className="card shadow-sm p-3 bg-dark">
+            <h5 className="text-center text-white">Job Status Overview</h5>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  label
+                >
+                  {pieData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-}
+};
 
 export default Admin;

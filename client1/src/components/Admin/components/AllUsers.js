@@ -24,7 +24,7 @@ const AllUsers = () => {
   }, [searchTerm, data]);
 
   return (
-    <div>
+    <div className="bg-secondary">
       {activeUsers && (
         <div
           style={{
@@ -85,7 +85,7 @@ const AllUsers = () => {
           </div>
         </div>
       )}
-      <h2 className="text-center">All Users</h2>
+      <h2 className="text-center text-white">All Users</h2>
       <input
         type="text"
         placeholder="Search..."
@@ -96,7 +96,7 @@ const AllUsers = () => {
       {results.length === 0 ? (
         <p>No users found.</p>
       ) : (
-        <div className="table-responsive">
+        <div className="table-responsive ">
           <table className="w-100 table table-bordered table-striped">
             <thead className="table-dark">
               <tr>

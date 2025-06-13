@@ -25,7 +25,7 @@ const ManageFreelancers = () => {
   }, [searchTerm, data]);
 
   return (
-    <div className="vh-100">
+    <div className="vh-100 bg-secondary">
       {activeUsers && (
         <div
           style={{
@@ -86,7 +86,7 @@ const ManageFreelancers = () => {
           </div>
         </div>
       )}
-      <h2>All Freelancers</h2>
+      <h2 className="text-center text-white">All Freelancers</h2>
       <input
         type="text"
         placeholder="Search..."

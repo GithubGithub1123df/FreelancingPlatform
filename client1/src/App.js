@@ -24,13 +24,20 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminAnnouncement from "./components/Admin/components/AdminAnnouncement";
 import AllUsers from "./components/Admin/components/AllUsers";
 import ManageFreelancers from "./components/Admin/components/ManageFreelancers";
+import AllClients from "./components/Admin/components/AllClients";
 import ManageJobs from "./components/Admin/components/ManageJobs";
 import Reports from "./components/Admin/components/Reports";
-import Settings from "./components/Admin/components/Settings";
 
+import FAQs from "./components/FAQs";
+import AdminFAQ from "./components/Admin/components/AdminFAQ";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import Profile from "./components/profile";
+import Hire from "./components/client/hire";
+import Activity from "./components/Activity";
+import ResetPassword from "./components/ResetPassword";
+import ForgotPassword from "./components/ForgotPassword";
+import IDScanner from "./components/IDScanner";
 function App() {
-  // const [user, setUser] = useState(JSON.parse(Cookies.get("user") || "null"));
-
   const isLoggedIn = window.localStorage.getItem("isLoggedIn");
   const user = window.localStorage.getItem("user");
   const userType = window.localStorage.getItem("userType");
@@ -48,6 +55,11 @@ function App() {
             <Route path="/contact" element={<Contact />}></Route>
             <Route path="/about" element={<About />}></Route>
             <Route path="/chatbot" element={<Chatbot />}></Route>
+            <Route path="/faq" element={<FAQs />}></Route>
+            <Route path="/PrivacyPolicy" element={<PrivacyPolicy />}></Route>
+            <Route path="/reset-password" element={<ResetPassword />} />
+
+            <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           </>
         )}
 
@@ -57,7 +69,7 @@ function App() {
 
           {userType == "Admin" && (
             <>
-              <Route path="/admin" element={<Admin />}></Route>
+              <Route path="/Admin" element={<Admin />}></Route>
               <Route path="/" element={<Admin />}></Route>
               <Route
                 path="/AdminAnnouncement"
@@ -69,32 +81,36 @@ function App() {
               ></Route>
               <Route path="/AllUsers" element={<AllUsers />}></Route>
               <Route path="/ManageJobs" element={<ManageJobs />}></Route>
+              <Route path="/AllClients" element={<AllClients />}></Route>
               <Route path="/Reports" element={<Reports />}></Route>
-              <Route path="/Settings" element={<Settings />}></Route>
+              <Route path="/FAQ" element={<AdminFAQ />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/IDScanner" element={<IDScanner />}></Route>
             </>
           )}
           {userType == "Client" && (
             <>
-              <Route path="/" element={<Navigate to="/Client" />}></Route>
+              <Route path="/Client" element={<Client />}></Route>
+              <Route path="/" element={<Client />}></Route>
               <Route path="/chatbot" element={<Chatbot />}></Route>
-              <Route
-                path="/UserNotification"
-                element={<Notification />}
-              ></Route>
+              <Route path="/notifications" element={<Notification />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/activity" element={<Activity />}></Route>
+              <Route path="/hire/:freelancerId" element={<Hire />} />
+              <Route path="/IDScanner" element={<IDScanner />}></Route>
             </>
           )}
           {userType == "Freelancer" && (
             <>
-              <Route path="/" element={<Navigate to="/Freelancer" />}></Route>
+              <Route path="/Freelancer" element={<Freelancer />}></Route>
+              <Route path="/" element={<Freelancer />}></Route>
               <Route path="/chatbot" element={<Chatbot />}></Route>
               <Route path="/notifications" element={<Notification />}></Route>
+              <Route path="/activity" element={<Activity />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/IDScanner" element={<IDScanner />}></Route>
             </>
           )}
-
-          <Route path="/client" element={<Client />}></Route>
-          <Route path="/admin" element={<Admin />}></Route>
-
-          <Route path="/Freelancer" element={<Freelancer />}></Route>
         </Route>
       </Routes>
       <Footer />

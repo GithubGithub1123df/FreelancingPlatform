@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const apiUrl = process.env.REACT_APP_API_URL;
+
 export default function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
@@ -17,15 +18,16 @@ export default function Login() {
       const users = res.data;
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("userType", user.usertype);
+      localStorage.setItem("userID", user._id);
       localStorage.setItem("isLoggedIn", true);
       if (user.usertype === "Admin") {
         const allUsers = res.data.users;
         localStorage.setItem("users", JSON.stringify(users));
-        navigate("/admin", { state: { user, allUsers } });
+        navigate("/Admin", { state: { user, allUsers } });
       } else if (user.usertype === "Freelancer") {
         navigate("/Freelancer", { state: { user } });
       } else {
-        navigate("/client", { state: { user } });
+        navigate("/Client", { state: { user } });
       }
     } catch (err) {
       // Show exact error message
@@ -67,6 +69,10 @@ export default function Login() {
         <button type="submit" className="btn btn-primary w-100">
           Login
         </button>
+
+        <a href="/forgot-password" className="text-blue-600">
+          Forgot Password?
+        </a>
       </form>
     </div>
   );

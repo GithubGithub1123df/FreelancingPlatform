@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import FAQs from "../../FAQs";
 const apiUrl = process.env.REACT_APP_API_URL;
 function AdminAnnouncement() {
   const [Announcements, setAnnouncements] = useState([]);
@@ -109,18 +110,21 @@ function AdminAnnouncement() {
             >
               <h5>{activeAnnouncement.title}</h5>
               <p>{activeAnnouncement.announce}</p>
-              <button
-                className="btn btn-danger h-75 d-flex align-items-center"
-                style={{
-                  fontSize: "12px",
-                }}
-                onClick={() => {
-                  deleteAnnouncement(activeAnnouncement._id);
-                  setActiveAnnouncement(null);
-                }}
-              >
-                Delete
-              </button>
+              <div className="d-flex align-items-center justify-content-between w-100 mb-2">
+                <button
+                  className="btn btn-danger h-75 d-flex align-items-center"
+                  style={{
+                    fontSize: "12px",
+                  }}
+                  onClick={() => {
+                    deleteAnnouncement(activeAnnouncement._id);
+                    setActiveAnnouncement(null);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+
               <span
                 className="position-absolute bottom-0 m-2"
                 style={{ fontSize: "12px", right: "10px", marginBottom: "7px" }}
@@ -150,30 +154,16 @@ function AdminAnnouncement() {
           </div>
         )}
       </div>
-      <div className="bg-secondary vh-100 w-75 position-absolute end-0 p-3">
-        <div className="w-100 d-flex align-items-center justify-content-center position-relative">
-          <h1>Announcements</h1>
+      <div className="bg-secondary vh-100">
+        <h1 className="text-center text-white">Announcements</h1>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
+        />
 
-          <div className="position-absolute end-0 m-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-search"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-            </svg>
-            <input
-              type="text"
-              placeholder="search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
-            />
-          </div>
-        </div>
         {/* sending Announcement place */}
         <div className="d-flex align-items-center justify-content-center flex-column">
           <h3>Send Announcements</h3>
@@ -211,7 +201,7 @@ function AdminAnnouncement() {
                   onClick={() => setActiveAnnouncement(announce)}
                   key={announce._id}
                   style={{ cursor: "pointer" }}
-                  className="w-75 bg-primary mt-2 p-2 rounded-5 fw-bold text-white w-75 position-relative overflow-hidden"
+                  className="w-75 bg-dark mt-2 p-2 rounded-5 fw-bold text-white w-75 position-relative overflow-hidden"
                 >
                   <span>{announce.title}</span>
                   <span
