@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+  profileImage: { type: String, default: "" },
+  profession: { type: String },
   Fname: { type: String, required: true },
   Lname: { type: String, required: true },
   username: { type: String, unique: true, required: true },
@@ -10,6 +12,7 @@ const userSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   usertype: { type: String, required: true },
   password: { type: String, required: true },
+  nationalId: { type: String },
   CreatedAt: {
     type: String,
     default: () => {

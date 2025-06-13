@@ -4,16 +4,22 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import FEEDBACK from "./models/Feedback.js";
+import FAQ from "./models/FAQ.js";
 import AdminAnnouncement from "./models/AdminAnnouncement.js";
 import Jobs from "./models/Jobs.js";
-const app = express();
-const PORT = 3001;
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
+import { fileURLToPath } from "url";
 const allowedOrigins = [
   "http://localhost:3000", // for local dev
   "https://freelancingplatform-1.onrender.com", // your deployed frontend
 ];
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const app = express();
+const PORT = 3001;
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -41,6 +47,7 @@ app.post("/register", async (req, res) => {
       Fname,
       username,
       password,
+      confirmPassword,
       Lname,
       phone,
       email,
@@ -48,6 +55,20 @@ app.post("/register", async (req, res) => {
       gender,
       usertype,
     } = req.body;
+
+    if (password !== confirmPassword)
+      return res.status(401).json({ message: "password doesn't match" });
+    if (Fname.length < 4 || Fname.length > 15)
+      return res.status(401).json({
+        message:
+          "First Name must be longer than 3 characters and less than 15 characters",
+      });
+    if (Lname.length < 4 || Lname.length > 15)
+      return res.status(401).json({
+        message:
+          "Last Name must be longer than 3 characters and less than 15 characters",
+      });
+
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({
       Fname,
@@ -216,6 +237,14 @@ app.get("/ManageFreelancers", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch Freelancers" });
   }
 });
+app.get("/AllClients", async (req, res) => {
+  try {
+    const users = await User.find({ usertype: "Client" });
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch Clients" });
+  }
+});
 app.get("/Client", async (req, res) => {
   try {
     const users = await User.find({ usertype: "Freelancer" });
@@ -284,17 +313,333 @@ app.get("/Reports", async (req, res) => {
 
   const freelancers = users.filter((u) => u.usertype === "Freelancer");
   const clients = users.filter((u) => u.usertype === "Client");
-  const activeJobs = jobs.filter((j) => j.status === "Active");
-  const completedJobs = jobs.filter((j) => j.status === "Completed");
+
+  const activeJobs = await Notification.countDocuments({
+    status: "accepted",
+  });
+  const completedJobs = await Notification.countDocuments({
+    status: "completed",
+  });
+  const CancelledJobs = await Notification.countDocuments({
+    status: "cancelled",
+  });
+  const PendingJobs = await Notification.countDocuments({
+    status: "pending",
+  });
+  const DeclinedJobs = await Notification.countDocuments({
+    status: "declined",
+  });
 
   res.json({
     totalUsers: users.length,
     totalFreelancers: freelancers.length,
     totalClients: clients.length,
     totalJobs: jobs.length,
-    activeJobs: activeJobs.length,
-    completedJobs: completedJobs.length,
+    activeJobs: activeJobs,
+    completedJobs: completedJobs,
+    CancelledJobs: CancelledJobs,
+    PendingJobs: PendingJobs,
+    DeclinedJobs: DeclinedJobs,
   });
+});
+
+app.get("/notifications", async (req, res) => {
+  try {
+    const Announcements = await AdminAnnouncement.find();
+    res.json(Announcements);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch Announcements" });
+  }
+});
+app.get("/Freelancer", async (req, res) => {
+  try {
+    const users = await User.find({ usertype: "Client" });
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch Freelancers" });
+  }
+});
+app.get("/FAQ", async (req, res) => {
+  try {
+    const Announcements = await FEEDBACK.find();
+    res.json(Announcements);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch Announcements" });
+  }
+});
+app.delete("/FAQ/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await FEEDBACK.findByIdAndDelete(id);
+    res.status(200).json({ message: "Deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting FAQs", error: err });
+  }
+});
+
+app.get("/profile/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id); // Ensure you're using Mongoose
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.put("/profile/:id", async (req, res) => {
+  try {
+    const updates = { ...req.body };
+
+    if (updates.password) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(updates.password, salt);
+    }
+    if (updates.username) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(updates.password, salt);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true }
+    );
+
+    res.json(updatedUser);
+  } catch (err) {
+    if (err.code === 11000) {
+      // Duplicate key error (unique field)
+      const field = Object.keys(err.keyValue)[0];
+      return res.status(400).json({ message: `${field} already exist` });
+    }
+
+    res.status(500).json({ message: "failed to update user" });
+  }
+});
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, "uploads");
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // e.g., 171234123.jpg
+  },
+});
+
+const upload = multer({ storage });
+
+app.put(
+  "/profile/:id/upload",
+  upload.single("profileImage"),
+  async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const imagePath = `/uploads/${req.file.filename}`;
+      await User.findByIdAndUpdate(userId, { profileImage: imagePath });
+      res
+        .status(200)
+        .json({ message: "Image uploaded", profileImage: imagePath });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload image", error });
+    }
+  }
+);
+app.put(
+  "/profile/:id/upload",
+
+  async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const professions = `${req.body.profession}`;
+      await User.findByIdAndUpdate(userId, { profession: professions });
+      res
+        .status(200)
+        .json({ message: "profession updated uploaded", profession });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update profession", error });
+    }
+  }
+);
+app.get("/admin", async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalJobs = await Notification.countDocuments();
+    const activeJobs = await Notification.countDocuments({
+      status: "accepted",
+    });
+    const completedJobs = await Notification.countDocuments({
+      status: "completed",
+    });
+    const CancelledJobs = await Notification.countDocuments({
+      status: "cancelled",
+    });
+    const PendingJobs = await Notification.countDocuments({
+      status: "pending",
+    });
+    const DeclinedJobs = await Notification.countDocuments({
+      status: "declined",
+    });
+
+    res.json({
+      totalUsers,
+      totalJobs,
+      activeJobs,
+      completedJobs,
+      CancelledJobs,
+      PendingJobs,
+      DeclinedJobs,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch admin stats" });
+  }
+});
+
+import Notification from "./models/Notification.js";
+
+app.post("/notif", async (req, res) => {
+  try {
+    const { senderId, receiverId, message, category, note } = req.body;
+
+    const newNotif = new Notification({
+      senderId,
+      receiverId,
+      message,
+      category,
+      note,
+      createdAt: new Date(),
+    });
+
+    await newNotif.save();
+    res.status(201).json({ message: "Notification sent successfully" });
+  } catch (err) {
+    console.error("Notification POST failed:", err.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/notif/:receiverId", async (req, res) => {
+  try {
+    const notifications = await Notification.find({
+      receiverId: req.params.receiverId,
+    }).sort({ createdAt: -1 });
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+app.get("/notif/:senderId", async (req, res) => {
+  try {
+    const notifications = await Notification.find({
+      senderId: req.params.senderId,
+    }).sort({ createdAt: -1 });
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
+
+app.put("/ManageJobs/:jobId/status", async (req, res) => {
+  const { jobId } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedJob = await Notification.findByIdAndUpdate(
+      jobId,
+      { status },
+      { new: true }
+    );
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update job status", error });
+  }
+});
+
+import nodemailer from "nodemailer";
+
+// Forgot Password Route
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: "Email is required" });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "bini6126@gmail.com",
+        pass: "xembdtmvmbigkapf",
+      },
+    });
+
+    const mailOptions = {
+      from: "bini6126@gmail.com", // 🔁 Same as above
+      to: email,
+      subject: "Password Reset",
+      html: `
+        <p>You requested a password reset.</p>
+        <p><a href="http://localhost:3000/reset-password?email=${email}">Click here to reset your password</a></p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "Reset link sent successfully" });
+  } catch (err) {
+    console.error("Email sending failed:", err);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: err.message });
+  }
+});
+
+// Handle Reset Password Submission
+app.post("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.updateOne({ email }, { $set: { password: hashedPassword } });
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to reset password" });
+  }
+});
+
+// server.js (Express)
+app.put("/IDScanner/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nationalId } = req.body;
+
+  if (!id || id === "undefined") {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { nationalId } },
+      { new: true } // returns updated document
+    );
+
+    if (!updatedUser) return res.status(404).send("User not found");
+
+    res.json(updatedUser);
+  } catch (err) {
+    console.error("Failed to update user:", err);
+    res.status(500).send("Failed to update ID");
+  }
 });
 
 app.listen(PORT, () =>
