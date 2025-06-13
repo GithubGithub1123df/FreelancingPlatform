@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-const apiUrl = process.env.REACT_APP_API_URL;
 import { useNavigate } from "react-router-dom";
+
+const apiUrl = process.env.REACT_APP_API_URL;
 function Hire() {
   const { freelancerId } = useParams();
   const [jobCategories, setJobCategories] = useState([]);

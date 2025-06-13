@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-const apiUrl = process.env.REACT_APP_API_URL;
+
 import {
   BarChart,
   Bar,
@@ -14,6 +14,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+
+const apiUrl = process.env.REACT_APP_API_URL;
 // blue, green, crimson red, purple, yellow
 const COLORS = ["#007bff", "#28a745", "#FFFF00", "#A020F0", "#DC143C"];
 

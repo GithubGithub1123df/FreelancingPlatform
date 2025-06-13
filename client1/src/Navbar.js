@@ -237,7 +237,7 @@ function Navbar({ isLoggedIn, userType }) {
                             </li>
                             <li>
                               <a className="dropdown-item" href="/">
-                                <SignOutButton />
+                                <SignoutButton />
                               </a>
                             </li>
                           </ul>
@@ -305,7 +305,7 @@ function Navbar({ isLoggedIn, userType }) {
                 </li>
               ))}
               <li className="mt-3">
-                <SignOutButton />
+                <SignoutButton />
               </li>
             </ul>
           </div>
