@@ -116,7 +116,7 @@ const IDScanner = ({ userId }) => {
       <p className="text-danger mt-3">
         Make sure the image is clear and readable.
         <br />
-        Do not Scan the ID
+        Do not store an id scanned by other App! it might fetch incorrect data
         <br />
         Capture the ID picure and upload here
       </p>

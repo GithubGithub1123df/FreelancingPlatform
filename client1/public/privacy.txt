@@ -49,7 +49,7 @@ You can request to:
 - Delete your account and data
 - Object to certain data uses
 
-To request changes, email us at: [Your Email]
+To request changes, email us at: connectservices@gmail.com
 
 7. Security
 We use encryption, secure connections (HTTPS), and regular security reviews to protect your data. However, no platform is 100% immune from threats.

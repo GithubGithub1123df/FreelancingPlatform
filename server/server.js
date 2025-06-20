@@ -4,7 +4,6 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import User from "./models/User.js";
 import FEEDBACK from "./models/Feedback.js";
-import FAQ from "./models/FAQ.js";
 import AdminAnnouncement from "./models/AdminAnnouncement.js";
 import Jobs from "./models/Jobs.js";
 import multer from "multer";
@@ -13,8 +12,8 @@ import fs from "fs";
 
 import { fileURLToPath } from "url";
 const allowedOrigins = [
-  "http://localhost:3000", // for local dev
-  "https://freelancingplatform-1.onrender.com", // your deployed frontend
+  "http://localhost:3000",
+  "https://freelancingplatform-1.onrender.com",
 ];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -97,7 +96,6 @@ app.post("/register", async (req, res) => {
     });
   } catch (err) {
     if (err.code === 11000) {
-      // Duplicate key error (unique field)
       const field = Object.keys(err.keyValue)[0];
       return res.status(400).json({ message: `${field} already exist` });
     }
@@ -140,29 +138,115 @@ app.post("/login", async (req, res) => {
 
 app.post("/Chatbot", (req, res) => {
   const responseDictionary = {
-    where:
-      "you can find freelancers and clients on this platform based on the role you registered\n you can find freelancers list if you register as a client \n and clients list if",
-    services:
-      "We offer services on the client demand and serve a good services.",
-    electronics:
-      "Electronics service is one of the services we provide. we can track electricians around your area and make them track reachout to you",
-    plumbing:
-      "Plumbing is one of the services we provide, we can track and nearby service providers and make them reachout for you",
-    admin:
-      "this platform only assigns admins by admins no other users can register as admins but freelancer or client only.",
-    ai: "we have an AI for chatbot like we are communicating right now, i can make you go through the website easily and make it easy to navigate",
-    client:
-      "client can view freelancers nearby and communicate with them here easily",
-    freelancer:
-      "You can find freelancers by category, skills, or rating. What service do you need?",
-    mission:
-      "Our mission is to provide a seamless experience for clients seeking top-notch professionals while empowering freelancers to showcase their skills and grow their careers. We understand that finding the right freelancer for the job can be challenging, which is why we’ve developed an advanced matching system to help clients easily find qualified freelancers based on job requirements, rank, and prior performance.",
-    about:
-      "about page can tell you more about our services and the aim and goal of the website and other details.",
-    contact:
-      "on the contact link you can find a contact page that can make you easily reach out to us using your name, email, subject and the message you want to send to us.",
-    features:
-      "Our platform offers features like instant messaging, real-time chat moderation powered by AI, and advanced ranking systems, so clients can confidently make informed decisions about the freelancers they hire. Our admin dashboard includes a comprehensive suite of management tools to ensure smooth operations for both freelancers and clients. From monitoring rankings to managing freelancer profiles, our platform is designed to make the freelance hiring process as transparent and user-friendly as possible.",
+    "how to hire":
+      "To hire a freelancer, go to the 'Freelancers' page, click on 'View Details', and then click 'Hire'. Fill in the job title, description, and duration. The job will appear in 'Pending Jobs' until the freelancer accepts.",
+
+    "job status":
+      "Job statuses include:\n- Pending: Waiting for freelancer response\n- Accepted: Freelancer is working\n- Declined: Freelancer refused\n- Completed: Job finished\n- Cancelled: Job stopped. You can view job progress on your Activity page.",
+
+    "profile update":
+      "You can update your name, bio, contact info, and profile image from the Profile page. Your National ID is visible there but cannot be changed once submitted.",
+
+    "profile creation":
+      "To create a profile, register with your full name, email, password, and upload a profile image and national ID. This information helps other users trust you and is required for platform access.",
+
+    "national id info":
+      "Your national ID is required for verification. It is securely stored and only visible to you and the admin. After submission, it cannot be changed.",
+
+    "id scanning":
+      "The platform scans your National ID when you upload it. Make sure the image is clear. This step is required for verification before using full features like hiring or getting hired.",
+
+    "hire button not showing":
+      "If you can't see the 'Hire' button, it's because you haven’t uploaded or verified your National ID yet. Go to your Profile and upload a valid ID to unlock hiring functionality.",
+
+    "forgot password":
+      "Click on 'Forgot Password' on the login page, enter your registered email, and a reset link will be sent to your inbox. Be sure to check spam folders if you don’t see it.",
+
+    "reset password":
+      "Once you receive the password reset email, click the link, and enter a new password. Make sure it’s strong and easy to remember. You can then log in with the new password.",
+
+    "send message":
+      "To message a freelancer or client, go to their profile and click 'Message', or open the chat section from your dashboard. All chats are private and real-time.",
+
+    notifications:
+      "Notifications alert you when someone hires you, updates a job status, or sends you a message. Click the bell icon at the top to view them.",
+    "contact page":
+      "You can reach us through the Contact page found in the footer of every page. Fill in your name, email, subject, and message. Our team will respond as soon as possible.",
+
+    "how to contact support":
+      "To contact support, go to the Contact page or click on 'Support' in the footer. Fill out the contact form or message the admin through chat for faster assistance.",
+
+    faq: "Our FAQ section answers common questions about hiring, job statuses, registration, verification, and using the platform. Visit the FAQ page from the footer or ask me directly!",
+
+    "frequently asked questions":
+      "You can find answers to popular questions like 'How do I hire?', 'Why can’t I see the hire button?', or 'How do I upload my ID?' on the FAQ page linked in the footer.",
+
+    "privacy policy":
+      "Our Privacy Policy explains how we handle your personal data, including your national ID and contact info. Your data is secure, not shared with third parties, and only used for platform functionality. View full details on the Privacy Policy page.",
+
+    "terms and policy":
+      "The Terms and Conditions and Privacy Policy outline how the platform works, your rights, responsibilities, and how your data is protected. You can read both in the contact page.",
+
+    "data security":
+      "We protect your data using encryption and secure storage. National IDs and messages are never visible to other users, and admins cannot access your private chats. You can read more on our Privacy Policy page.",
+
+    "where is the faq":
+      "You can find the FAQ page in the footer. It covers hiring, profile issues, ID verification, and more. You can also ask me directly and I’ll help!",
+
+    "how is my data used":
+      "Your data is only used to match clients and freelancers and ensure secure identity verification. We don’t share or sell your information. Read our Privacy Policy in the footer to learn more.",
+
+    "how to report a problem":
+      "To report issues like fake profiles, harassment, or technical problems, go to the Contact page and submit your concern. Our admin team will investigate and respond.",
+    "about notification":
+      "Notifications show important actions like job status changes, new hires, and messages. Each one links directly to the relevant job or chat.",
+
+    "freelancer view jobs":
+      "As a freelancer, your Activity page shows:\n- Pending Jobs: waiting for your response\n- Accepted Jobs: work in progress\n- Completed/Cancelled Jobs: history. Use the buttons to update job status in real-time.",
+
+    "client view jobs":
+      "As a client, your Activity page shows all jobs you've posted. You can track if they are pending, accepted, declined, or completed. Use this page to manage your hires.",
+
+    "freelancers list":
+      "As a client, you can view all available freelancers on the Freelancers page. Click on a profile to see details, then click 'Hire' if you're interested (after verifying your ID).",
+
+    "clients list":
+      "As a freelancer, you can browse clients from the Clients page. This helps you see who has posted jobs, their status, and message them if needed.",
+
+    "register help":
+      "To register, choose if you're a Client or Freelancer. Fill in your name, email, password, upload your profile image and National ID, then submit. You'll be logged in right after.",
+    register:
+      "To register, choose if you're a Client or Freelancer. Fill in your name, email, password, upload your profile image and National ID, then submit. You'll be logged in right after.",
+
+    "contact support":
+      "For help, click 'Support' in the footer or message the admin in the chat. We’re here to help you with issues like login problems, job errors, and more.",
+    help: "For help, click 'Support' in the footer or message the admin in the chat. We’re here to help you with issues like login problems, job errors, and more.",
+
+    "general greeting":
+      "Hello! I'm your assistant . I can help you hire freelancers, view jobs, reset your password, manage your profile, and more. Just ask!",
+    hi: "Hello! I'm your assistant . I can help you hire freelancers, view jobs, reset your password, manage your profile, and more. Just ask!",
+    hello:
+      "Hello! I'm your assistant . I can help you hire freelancers, view jobs, reset your password, manage your profile, and more. Just ask!",
+
+    "freelancer verification":
+      "Freelancers must upload a valid national ID and complete their profile to be verified. Only verified freelancers can be hired by clients.",
+
+    "how payments work":
+      "At this time, payments are handled off-platform. Once a job is agreed on, clients and freelancers must discuss payment methods directly and respectfully.",
+    payments:
+      "At this time, payments are handled off-platform. Once a job is agreed on, clients and freelancers must discuss payment methods directly and respectfully.",
+
+    "change password":
+      "To change your password while logged in, go to Profile → Change Password. Enter your current and new password. For forgotten passwords, use the 'Forgot Password' option on the login page.",
+
+    "dashboard explanation":
+      "Your dashboard gives you access to your role-specific tools:\n- Clients: manage job posts, view freelancers, hire, and check status.\n- Freelancers: view jobs, accept/decline offers, complete tasks, and chat.",
+
+    "terms and safety":
+      "Respect all users. Upload only real and clear ID images. Harassment or scams will lead to removal. All messages are private and not monitored by admins.",
+
+    unknown:
+      "Sorry, I didn’t catch that. You can ask me things like 'How to hire', 'Profile update', or 'Reset password'. Try rephrasing your question.",
   };
 
   const { message } = req.body;
@@ -379,7 +463,7 @@ app.delete("/FAQ/:id", async (req, res) => {
 
 app.get("/profile/:id", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id); // Ensure you're using Mongoose
+    const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (err) {
@@ -409,7 +493,6 @@ app.put("/profile/:id", async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     if (err.code === 11000) {
-      // Duplicate key error (unique field)
       const field = Object.keys(err.keyValue)[0];
       return res.status(400).json({ message: `${field} already exist` });
     }
@@ -427,7 +510,7 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // e.g., 171234123.jpg
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -563,8 +646,7 @@ app.put("/ManageJobs/:jobId/status", async (req, res) => {
 });
 
 import nodemailer from "nodemailer";
-
-// Forgot Password Route
+const apiUrl = process.env.REACT_APP_API_URL;
 app.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
 
@@ -584,12 +666,12 @@ app.post("/forgot-password", async (req, res) => {
     });
 
     const mailOptions = {
-      from: "bini6126@gmail.com", // 🔁 Same as above
+      from: "bini6126@gmail.com",
       to: email,
       subject: "Password Reset",
       html: `
-        <p>You requested a password reset.</p>
-        <p><a href="http://localhost:3000/reset-password?email=${email}">Click here to reset your password</a></p>
+        <p>You requested a password reset for an account with an email address: ${email}.</p>
+        <p><a href=${apiUrl}/reset-password?email=${email}>Click here to reset your password</a></p>
       `,
     };
 
@@ -604,7 +686,6 @@ app.post("/forgot-password", async (req, res) => {
   }
 });
 
-// Handle Reset Password Submission
 app.post("/reset-password", async (req, res) => {
   const { email, password } = req.body;
 
@@ -617,7 +698,6 @@ app.post("/reset-password", async (req, res) => {
   }
 });
 
-// server.js (Express)
 app.put("/IDScanner/:id", async (req, res) => {
   const { id } = req.params;
   const { nationalId } = req.body;
@@ -630,7 +710,7 @@ app.put("/IDScanner/:id", async (req, res) => {
     const updatedUser = await User.findOneAndUpdate(
       { _id: id },
       { $set: { nationalId } },
-      { new: true } // returns updated document
+      { new: true }
     );
 
     if (!updatedUser) return res.status(404).send("User not found");

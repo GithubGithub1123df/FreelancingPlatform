@@ -28,10 +28,6 @@ const Activity = () => {
         status: newStatus,
       });
 
-      if (res.data.status === newStatus) {
-        await handleHire(activeNotif.senderId, newStatus);
-      }
-
       const updatedNotif = await axios.get(`${apiUrl}/notif/${freelancerId}`);
       setActivities(updatedNotif.data);
       setActiveNotif(null);
